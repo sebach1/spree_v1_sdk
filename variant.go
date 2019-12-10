@@ -1,6 +1,7 @@
 package spree
 
 import (
+	"bytes"
 	"encoding/json"
 )
 
@@ -61,12 +62,12 @@ func (v *Variant) StockItemByLocation(stockLocationId StockLocationId) (*StockIt
 	return nil, errStockItemNotFound
 }
 
-func (s *Spree) GetVariant(id VariantId) (*Variant, error) {
+func (s *Spree) GetVariant(id VariantId, prodId ProductId) (*Variant, error) {
 	params, err := s.paramsWithToken()
 	if err != nil {
 		return nil, err
 	}
-	URL, err := s.RouteTo("/variants/%v", params, id)
+	URL, err := s.RouteTo("/products/%v/variants/%v", params, prodId, id)
 	if err != nil {
 		return nil, err
 	}
@@ -84,4 +85,76 @@ func (s *Spree) GetVariant(id VariantId) (*Variant, error) {
 		return nil, err
 	}
 	return v, nil
+}
+
+func (s *Spree) SetVariant(v *Variant, prodId ProductId) (newVar *Variant, err error) {
+	if v == nil {
+		return nil, errNilVariant
+	}
+	if v.Id == 0 {
+		newVar, err = s.createVariant(v, prodId)
+	} else {
+		newVar, err = s.updateVariant(v, prodId)
+	}
+	return
+}
+
+func (s *Spree) createVariant(v *Variant, prodId ProductId) (*Variant, error) {
+	params, err := s.paramsWithToken()
+	if err != nil {
+		return nil, err
+	}
+	URL, err := s.RouteTo("/products/%s/variants", params, prodId)
+	if err != nil {
+		return nil, err
+	}
+	jsonVar, err := json.Marshal(v)
+	if err != nil {
+		return nil, err
+	}
+	resp, err := s.Post(URL, bytes.NewReader(jsonVar))
+	if err != nil {
+		return nil, err
+	}
+	defer resp.Body.Close()
+	if resp.StatusCode >= 400 {
+		return nil, errFromReader(resp.Body)
+	}
+	newVar := &Variant{}
+	err = json.NewDecoder(resp.Body).Decode(newVar)
+	if err != nil {
+		return nil, err
+	}
+	return newVar, nil
+}
+
+func (s *Spree) updateVariant(v *Variant, prodId ProductId) (*Variant, error) {
+	params, err := s.paramsWithToken()
+	if err != nil {
+		return nil, err
+	}
+	URL, err := s.RouteTo("/products/%s/variants/%s", params, prodId, v.Id)
+
+	if err != nil {
+		return nil, err
+	}
+	v.Id = 0 // Unset id since its in the route
+	jsonVar, err := json.Marshal(v)
+	if err != nil {
+		return nil, err
+	}
+	resp, err := s.Put(URL, bytes.NewReader(jsonVar))
+	if err != nil {
+		return nil, err
+	}
+	defer resp.Body.Close()
+	if resp.StatusCode >= 400 {
+		return nil, errFromReader(resp.Body)
+	}
+	newVar := &Variant{}
+	err = json.NewDecoder(resp.Body).Decode(newVar)
+	if err != nil {
+		return nil, err
+	}
+	return newVar, nil
 }
