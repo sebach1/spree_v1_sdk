@@ -19,8 +19,8 @@ type StockItem struct {
 	Force             bool            `json:"force,omitempty"`
 }
 
-func (s *Spree) UpdateStock(id VariantId, stockLocationId StockLocationId, stock int) (*StockItem, error) {
-	v, err := s.GetVariant(id)
+func (s *Spree) UpdateStock(id VariantId, prodId ProductId, stockLocationId StockLocationId, count int) (*StockItem, error) {
+	v, err := s.GetVariant(id, prodId)
 	if err != nil {
 		return nil, err
 	}
@@ -33,7 +33,7 @@ func (s *Spree) UpdateStock(id VariantId, stockLocationId StockLocationId, stock
 		return nil, err
 	}
 	si.Force = true // overrides actual stock; unless the api will perform an append
-	si.CountOnHand = stock
+	si.CountOnHand = count
 	si.Id = 0 // unset id due its on param
 	URL, err := s.RouteTo("/stock_locations/%v/stock_items/%v", params, stockLocationId, si.Id)
 	if err != nil {
