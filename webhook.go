@@ -1,6 +1,12 @@
 package spree
 
 type Webhook struct {
-	ResourceId int
-	Resource   string
+	Site     string
+	Resource *Resource
+	Parent   *Resource
+}
+
+type Resource struct {
+	Id   int
+	Name string
 }

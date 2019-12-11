@@ -10,7 +10,7 @@ type VariantId int
 type Variant struct {
 	Id   VariantId `json:"id"`
 	Name string    `json:"name"`
-	Sku  string    `json:"sku"`
+	SKU  string    `json:"sku"`
 
 	Price     string `json:"price"`
 	CostPrice string `json:"cost_price"`
@@ -51,7 +51,10 @@ type OptionValue struct {
 	OptionTypePresentation string `json:"option_type_presentation"`
 }
 
-// TODO: variants-only operations
+func NewVariant(name string, price float64, optionValues []*OptionValue, picsSrc []string) *Variant {
+	v := &Variant{Price: TransformPrice(price), Name: name, OptionValues: optionValues}
+	return v
+}
 
 func (v *Variant) StockItemByLocation(stockLocationId StockLocationId) (*StockItem, error) {
 	for _, si := range v.StockItems {
