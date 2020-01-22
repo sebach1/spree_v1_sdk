@@ -34,7 +34,7 @@ func (s *Spree) RouteTo(path string, params url.Values, ids ...interface{}) (str
 
 func (s *Spree) paramsWithToken() (url.Values, error) {
 	if s.Key == "" {
-		return nil, errNilKey
+		return nil, ErrNilKey
 	}
 	params := url.Values{}
 	params.Set("token", string(s.Key))

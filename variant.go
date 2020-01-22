@@ -62,7 +62,7 @@ func (v *Variant) StockItemByLocation(stockLocationId StockLocationId) (*StockIt
 			return si, nil
 		}
 	}
-	return nil, errStockItemNotFound
+	return nil, ErrStockItemNotFound
 }
 
 func (s *Spree) GetVariant(id VariantId, prodId ProductId) (*Variant, error) {
@@ -92,7 +92,7 @@ func (s *Spree) GetVariant(id VariantId, prodId ProductId) (*Variant, error) {
 
 func (s *Spree) SetVariant(v *Variant, prodId ProductId) (newVar *Variant, err error) {
 	if v == nil {
-		return nil, errNilVariant
+		return nil, ErrNilVariant
 	}
 	if v.Id == 0 {
 		newVar, err = s.createVariant(v, prodId)

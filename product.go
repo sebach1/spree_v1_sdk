@@ -50,7 +50,7 @@ func ParsePrice(strPrice string) (float64, error) {
 
 func (s *Spree) SetProduct(prod *Product) (newProd *Product, err error) {
 	if prod == nil {
-		return nil, errNilProduct
+		return nil, ErrNilProduct
 	}
 	if prod.Id == 0 {
 		newProd, err = s.createProduct(prod)
@@ -150,7 +150,7 @@ func (s *Spree) GetProducts(page int) (*ProductsEdge, error) {
 	if err != nil {
 		return nil, err
 	}
-	params.Set("page", string(page))
+	params.Set("page", strconv.Itoa(page))
 	URL, err := s.RouteTo("/products", params)
 	if err != nil {
 		return nil, err
@@ -177,7 +177,7 @@ func (s *Spree) getProducts(page int, errCh chan<- error, prodCh chan<- []*Produ
 		errCh <- err
 		return
 	}
-	params.Set("page", string(page))
+	params.Set("page", strconv.Itoa(page))
 	URL, err := s.RouteTo("/products", params)
 	if err != nil {
 		errCh <- err
@@ -270,13 +270,13 @@ func (p *Product) validate() error {
 		return err
 	}
 	if price == 0 {
-		return errNilPrice
+		return ErrNilPrice
 	}
 	if p.Name == "" {
-		return errNilProductName
+		return ErrNilProductName
 	}
 	if p.ShippingCategoryId == 0 {
-		return errNilShippingCategoryId
+		return ErrNilShippingCategoryId
 	}
 	return nil
 }

@@ -7,38 +7,38 @@ import (
 )
 
 var (
-	errNilKey = errors.New("the given api key is nil")
+	ErrNilKey = errors.New("the given api key is nil")
 
-	errNilProductId = errors.New("the given PRODUCT Id is NIL")
-	errNilProduct   = errors.New("the given PRODUCT TITLE is NIL")
-	errNilPictures  = errors.New("the given PRODUCT PICTURES are NIL")
-	errNilStock     = errors.New("the given PRODUCT STOCK is NIL")
+	// ErrNilProductId = errors.New("the given PRODUCT Id is NIL")
+	ErrNilProduct = errors.New("the given PRODUCT TITLE is NIL")
+	// ErrNilPictures  = errors.New("the given PRODUCT PICTURES are NIL")
+	// ErrNilStock     = errors.New("the given PRODUCT STOCK is NIL")
 
-	errNilPrice              = errors.New("the given PRODUCT PRICE is NIL")
-	errNilShippingCategoryId = errors.New("the given PRODUCT SHIPPING CATEGORY ID is NIL")
-	errNilProductName        = errors.New("the given PRODUCT NAME is NIL")
+	ErrNilPrice              = errors.New("the given PRODUCT PRICE is NIL")
+	ErrNilShippingCategoryId = errors.New("the given PRODUCT SHIPPING CATEGORY ID is NIL")
+	ErrNilProductName        = errors.New("the given PRODUCT NAME is NIL")
 
-	errStockItemNotFound = errors.New("the given STOCK ITEM was NOT FOUND")
+	ErrStockItemNotFound = errors.New("the given STOCK ITEM was NOT FOUND")
 
-	errNilVariant      = errors.New("the given VARIANT is NIL")
-	errVariantNotFound = errors.New("the given VARIANT does NOT EXISTS")
-	// errNilCategory     = errors.New("the given CATEGORY is NIL")
-	errInvalIdListingTypeId = errors.New("the given LISTING TYPE Id is INVALID")
+	ErrNilVariant = errors.New("the given VARIANT is NIL")
+	// errVariantNotFound = errors.New("the given VARIANT does NOT EXISTS")
+	// ErrNilCategory     = errors.New("the given CATEGORY is NIL")
+	// errInvalIdListingTypeId = errors.New("the given LISTING TYPE Id is INVALID")
 
-	errInvalIdCategoryId = errors.New("the given CATEGORY Id is INVALId")
-	errNilCategoryId     = errors.New("the given CATEGORY Id is NIL")
-	errNilCombinations   = errors.New("the given ATTR COMBINATIONS are NIL")
+	// errInvalIdCategoryId = errors.New("the given CATEGORY Id is INVALId")
+	// ErrNilCategoryId     = errors.New("the given CATEGORY Id is NIL")
+	// ErrNilCombinations   = errors.New("the given ATTR COMBINATIONS are NIL")
 
-	errInvalIdBuyingMode = errors.New("the BUYING MODE is invalid")
-	errInvalIdCondition  = errors.New("the CONDITION is invalid")
+	// errInvalIdBuyingMode = errors.New("the BUYING MODE is invalid")
+	// errInvalIdCondition  = errors.New("the CONDITION is invalid")
 
-	errNilVarStock    = errors.New("the VARIANT wanted to be created has NIL STOCK")
-	errNilVarPrice    = errors.New("the VARIANT wanted to be created has NIL PRICE")
-	errNilVarPictures = errors.New("the VARIANT wanted to be created has NIL PICTURES")
+	// ErrNilVarStock    = errors.New("the VARIANT wanted to be created has NIL STOCK")
+	// ErrNilVarPrice    = errors.New("the VARIANT wanted to be created has NIL PRICE")
+	// ErrNilVarPictures = errors.New("the VARIANT wanted to be created has NIL PICTURES")
 
-	errIncompatibleVar = errors.New("the given VARIANT is INCOMPATIBLE")
+	// errIncompatibleVar = errors.New("the given VARIANT is INCOMPATIBLE")
 
-	errRemoteInconsistency = errors.New("the SERVER had an inconsistency while performing a request (status code != real behaviour)")
+	ErrRemoteInconsistency = errors.New("the SERVER had an inconsistency while performing a request (status code != real behaviour)")
 )
 
 type Error struct {
@@ -69,7 +69,7 @@ func errFromReader(stream io.Reader) error {
 		return err
 	}
 	if body.Err == "" {
-		body.Err = errRemoteInconsistency.Error()
+		body.Err = ErrRemoteInconsistency.Error()
 	}
 	return body
 }
